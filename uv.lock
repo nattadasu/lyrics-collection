@@ -13,8 +13,8 @@ wheels = [
 
 [[package]]
 name = "ass-to-lrc"
-version = "0.1.0"
-source = { git = "https://github.com/nattadasu/ass-to-lrc.git#b224fbd8986167bc0b29bf0f46833a79906756a9" }
+version = "0.2.0"
+source = { git = "https://github.com/nattadasu/ass-to-lrc.git#419fe8154e20df2db78787f91432a1dbbe011403" }
 dependencies = [
     { name = "ass" },
     { name = "typer" },
