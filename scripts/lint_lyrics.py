@@ -130,8 +130,9 @@ class MusixmatchLyricsLinter:
                     f"Line {i}: Don't end lines with periods (unless acronym): '{text}'"
                 )
 
-            # Check for multiple punctuation marks
-            if re.search(r"[!?.]{2,}", text):
+            # Check for multiple punctuation marks (but allow ellipses - exactly 3 dots)
+            # Match: two dots not followed by another, or 4+ dots, or multiple !?, or !?. combos
+            if re.search(r"(?<!\.)\.\.(?!\.)|\.{4,}|[!?]{2,}|[!?]\.(?!\.)|\.\.?[!?]", text):
                 self.errors.append(
                     f"Line {i}: Don't use multiple punctuation marks: '{text}'"
                 )
