@@ -1,0 +1,24 @@
+repos:
+  - repo: local
+    hooks:
+      - id: convert-ass-to-lrc
+        name: Convert ASS to LRC
+        entry: bash -c 'task convert'
+        language: system
+        pass_filenames: false
+        files: '\.ass$'
+        
+      - id: lint-lyrics
+        name: Lint Lyrics (Musixmatch Guidelines)
+        entry: bash -c 'task lint'
+        language: system
+        pass_filenames: false
+        files: '\.ass$'
+        
+      - id: add-compiled-files
+        name: Stage compiled LRC files
+        entry: bash -c 'git add compiled/ || true'
+        language: system
+        pass_filenames: false
+        files: '\.ass$'
+        always_run: false
