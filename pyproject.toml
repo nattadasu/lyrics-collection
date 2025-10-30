@@ -1,0 +1,10 @@
+[project]
+name = "lyrics-collection"
+version = "0.1.0"
+description = "A collection of ASS lyrics because all LRC editors were suck when playing ALAC..."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "ass-to-lrc @ git+https://github.com/nattadasu/ass-to-lrc.git",
+    "ass>=0.5.2",
+]
