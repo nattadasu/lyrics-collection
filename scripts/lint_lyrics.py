@@ -70,7 +70,12 @@ class MusixmatchLyricsLinter:
                 continue
 
             # Check if first letter is capitalized
-            if text and text[0].isalpha() and not text[0].isupper():
+            # Skip if line starts with a script that doesn't have case (e.g., CJK, Arabic, etc.)
+            first_alpha = next((c for c in text if c.isalpha()), None)
+            if first_alpha and not first_alpha.isupper() and not first_alpha.islower():
+                # Character doesn't have case distinction (e.g., CJK), skip check
+                pass
+            elif text and text[0].isalpha() and not text[0].isupper():
                 if not any(text.startswith(p) for p in ["iPhone", "iPad", "eBay"]):
                     self.errors.append(
                         f"Line {i}: First letter must be capitalized: '{text}'"
