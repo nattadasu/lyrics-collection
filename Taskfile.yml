@@ -3,6 +3,7 @@ version: '3'
 vars:
   ASS_DIR: ass
   COMPILED_DIR: compiled
+  ITUNES_MUSIC_DIR: /run/media/nattadasu/Music/iTunes/iTunes Media/Music
 
 tasks:
   convert:
@@ -53,3 +54,9 @@ tasks:
     cmds:
       - task: convert
       - task: lint
+
+  sync:
+    desc: Sync compiled LRC files to iTunes Media Music directory
+    cmds:
+      - |
+        rsync -av {{.COMPILED_DIR}}/ "{{.ITUNES_MUSIC_DIR}}/"
