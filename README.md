@@ -50,7 +50,7 @@ task lint
 The linter checks for:
 
 **Capitalization:**
-- First letter of each line must be capitalized
+- First letter of each line must be capitalized (skipped for lines starting with non-Latin scripts)
 - No all-caps for emphasis (SHOUTING)
 - No Title Case Every Word
 - Parenthetical text only capitalized when grammatically appropriate
@@ -58,7 +58,7 @@ The linter checks for:
 **Punctuation:**
 - No commas at end of lines
 - No periods at end of lines (unless acronyms)
-- No multiple punctuation marks (!!, ??)
+- No multiple punctuation marks (!!, ??) - ellipses (...) are allowed
 - Proper spacing around punctuation
 
 **Numbers:**
