@@ -1,0 +1,55 @@
+version: '3'
+
+vars:
+  ASS_DIR: ass
+  COMPILED_DIR: compiled
+
+tasks:
+  convert:
+    desc: Convert all ASS files to LRC format recursively
+    cmds:
+      - mkdir -p {{.COMPILED_DIR}}
+      - |
+        find {{.ASS_DIR}} -type f -name "*.ass" | while read -r ass_file; do
+          relative_path="${ass_file#{{.ASS_DIR}}/}"
+          output_dir="{{.COMPILED_DIR}}/$(dirname "$relative_path")"
+          mkdir -p "$output_dir"
+          output_file="$output_dir/$(basename "$relative_path" .ass).lrc"
+          echo "Converting: $ass_file -> $output_file"
+          uv run ass2lrc convert -s "$ass_file" -o "$output_file"
+        done
+
+  convert:enhanced:
+    desc: Convert all ASS files to enhanced LRC format recursively
+    cmds:
+      - mkdir -p {{.COMPILED_DIR}}
+      - |
+        find {{.ASS_DIR}} -type f -name "*.ass" | while read -r ass_file; do
+          relative_path="${ass_file#{{.ASS_DIR}}/}"
+          output_dir="{{.COMPILED_DIR}}/$(dirname "$relative_path")"
+          mkdir -p "$output_dir"
+          output_file="$output_dir/$(basename "$relative_path" .ass).lrc"
+          echo "Converting: $ass_file -> $output_file"
+          uv run ass2lrc convert -e "$ass_file" -o "$output_file"
+        done
+
+  lint:
+    desc: Run Python linter to check lyrics against Musixmatch guidelines
+    cmds:
+      - uv run python scripts/lint_lyrics.py
+
+  clean:
+    desc: Clean compiled directory
+    cmds:
+      - rm -rf {{.COMPILED_DIR}}/*
+
+  install:
+    desc: Install dependencies using uv
+    cmds:
+      - uv sync
+
+  precommit:
+    desc: Run pre-commit hooks locally
+    cmds:
+      - task: convert
+      - task: lint
