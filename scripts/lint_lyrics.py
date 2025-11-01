@@ -122,14 +122,15 @@ class MusixmatchLyricsLinter:
 
             if not text.strip():
                 continue
+            rstrip = text.rstrip()
 
             # Check for commas at end of line
-            if text.rstrip().endswith(","):
+            if rstrip.endswith(",") or rstrip("、"):
                 self.errors.append(f"Line {i}: Don't end lines with commas: '{text}'")
 
             # Check for periods at end of line (except acronyms)
-            if text.rstrip().endswith(".") and not re.search(
-                r"[A-Z]\.$", text.rstrip()
+            if (rstrip.endswith(".") or rstrip.endswith("。")) and not re.search(
+                r"[A-Z]\.$", rstrip
             ):
                 self.errors.append(
                     f"Line {i}: Don't end lines with periods (unless acronym): '{text}'"
