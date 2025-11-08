@@ -1,82 +1,35 @@
-# lyrics-collection
+# Lyrics Collection
 
-A collection of ASS lyrics because all LRC editors were suck when playing ALAC...
+This repository is a curated collection of high-quality, timed music lyrics.
+The primary format for all lyrics is **Advanced SubStation Alpha (`.ass`)**,
+chosen for its ability to support precise, syllable-level synchronization
+and rich styling.
 
-## Requirements
+For broader compatibility with players and devices, all `.ass` files
+are automatically converted to the standard **Lyrics (`.lrc`)** format.
 
-- [Task](https://taskfile.dev/) - Task runner
-- [uv](https://docs.astral.sh/uv/) - Python package manager
-- Python 3.13+
+## Repository Structure
 
-## Setup
-
-1. Install dependencies:
-
-   ```bash
-   task install
-   ```
-
-2. (Optional) Set up pre-commit hooks:
-
-   ```bash
-   pip install pre-commit
-   pre-commit install
-   ```
+- **/ass**: Contains the source-of-truth lyric files in `.ass` format.
+  All contributions and edits should be made here.
+- **/compiled**: Contains `.lrc` files that are automatically generated from
+  the files in the `/ass` directory.
+  **Do not edit files in this directory directly.**
 
 ## Usage
 
-### Convert ASS to LRC
+The `.lrc` files in the `compiled` directory are ready for use with any
+compatible music player.
 
-Convert all ASS files to simple LRC format:
+The conversion from `.ass` to `.lrc` is handled automatically via GitHub Actions
+workflow whenever changes are pushed to the `main` branch.
 
-```bash
-task convert
-```
+## Contributing
 
-Convert to enhanced LRC format (with word-level timing):
-
-```bash
-task convert:enhanced
-```
-
-### Lint Lyrics
-
-Run the Musixmatch guidelines linter:
-
-```bash
-task lint
-```
-
-The linter checks for:
-
-**Capitalization:**
-- First letter of each line must be capitalized (skipped for lines starting with non-Latin scripts)
-- No all-caps for emphasis (SHOUTING)
-- No Title Case Every Word
-- Parenthetical text only capitalized when grammatically appropriate
-
-**Punctuation:**
-- No commas at end of lines
-- No periods at end of lines (unless acronyms)
-- No multiple punctuation marks (!!, ??) - ellipses (...) are allowed
-- Proper spacing around punctuation
-
-**Numbers:**
-- Numbers 11+ must be numeric (99, not ninety-nine)
-- Numbers 1-10 should be words (one, two, three)
-
-**Formatting:**
-- No multipliers like (x5) - transcribe repetitions fully
-- No censorship with asterisks (****) - use hyphen if audio censored (f-)
-- No structure labels like (Verse - Artist)
-- No sound effect descriptions like *dial tone*
-- Direct speech must follow: `She said, "Hello there"`
-- Use straight quotes (") not smart quotes (“”)
-
-**Special Cases:**
-- Scripts without case systems (Arabic, Chinese, Japanese) skip capitalization checks
-- Common acronyms (DJ, TV, USA, UK) are allowed in caps
+We welcome contributions! If you would like to add new lyrics or fix
+existing ones, please see our [**Contributing Guidelines**](CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the [Creative Commons Attribution-ShareAlike 4.0 International License](LICENSE).
+This project is licensed under
+the [Creative Commons Attribution-ShareAlike 4.0 International License](LICENSE).
