@@ -5,7 +5,7 @@ description = "A collection of ASS lyrics because all LRC editors were suck when
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "ass-to-lrc>=0.3.0",
+    "ass-to-lrc>=0.4.0",
     "ass>=0.5.2",
     "pre-commit>=4.3.0",
 ]
