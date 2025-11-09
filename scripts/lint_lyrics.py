@@ -8,7 +8,7 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 import ass
 
@@ -108,7 +108,7 @@ class LintError:
 class MusixmatchLyricsLinter:
     """Linter for ASS lyrics files following Musixmatch guidelines."""
 
-    def __init__(self, file_path: Path, disabled_rules: Set[str] = None):
+    def __init__(self, file_path: Path, disabled_rules: Optional[Set[str]] = None):
         self.file_path = file_path
         self.lint_errors: List[LintError] = []
         self.disabled_rules_global = disabled_rules or set()
@@ -123,7 +123,7 @@ class MusixmatchLyricsLinter:
             self.lint_errors.append(LintError("MX000", 0, str(e)))
             self.doc = None
 
-    def lint(self) -> Tuple[List[str], List[str]]:
+    def lint(self) -> Tuple[List[LintError], List[LintError]]:
         """Run all linting checks."""
         if self.doc is None:
             return self._format_output()
@@ -172,7 +172,7 @@ class MusixmatchLyricsLinter:
 
     def _get_line_suppressions(self, event: Any) -> Set[str]:
         """Extract suppression rules from the effect field (noqa or skip-XXX)."""
-        suppressions = set()
+        suppressions: Set[str] = set()
         if not hasattr(event, "effect"):
             return suppressions
 
@@ -653,7 +653,7 @@ Examples:
                 # Show the lint message below if available
                 if lint_msg:
                     console.print(
-                        f"       [dim]> {lint_msg}[/dim]", highlight=False
+                        f"         [dim]> {lint_msg}[/dim]", highlight=False
                     )
 
     # Summary
