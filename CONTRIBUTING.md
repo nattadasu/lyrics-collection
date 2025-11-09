@@ -71,10 +71,12 @@ The `task lint` command will check for most of these automatically.
   complete sentence.
 
 ### Punctuation
-- Do not use commas at the end of lines.
-- Do not use periods at the end of lines (unless it's part of an acronym).
+- Do not use commas at the end of lines (this includes Japanese comma 、).
+- Do not use periods at the end of lines (unless it's part of an acronym or
+  ellipsis). This includes Japanese period 。.
 - Avoid multiple consecutive punctuation marks (e.g., `!!`, `??`). Ellipses
-  (`...`) are an exception.
+  (`...` or `…`) are an exception.
+- Use Unicode ellipsis (`…`) instead of three dots (`...`) when possible.
 - Ensure there is proper spacing around punctuation.
 
 ### Numbers
@@ -88,10 +90,15 @@ The `task lint` command will check for most of these automatically.
   a hyphen (e.g., `f-`).
 - Do not include structure labels like `(Verse - Artist)`.
 - Do not include descriptions of sound effects like `*dial tone*`.
+- Do not use ASS override tags for styling (italic, bold, colors, etc.). Only
+  karaoke timing tags (`\k`, `\K`, `\kf`, `\ko`) are allowed.
 - Direct speech must be enclosed in straight quotes: `She said, "Hello there"`.
   Do not use smart quotes (`“”`).
 
 ### Special Cases
 - Capitalization checks are skipped for scripts without a case system (e.g.,
   Arabic, Chinese, Japanese).
-- Common acronyms like `DJ`, `TV`, `USA`, and `UK` are permitted to be in uppercase.
+- Common acronyms like `DJ`, `TV`, `USA`, `UK`, `NYC`, and `LA` are permitted
+  to be in uppercase.
+- Brand names like `iPhone`, `iPad`, and `eBay` are allowed to start with
+  lowercase letters.
