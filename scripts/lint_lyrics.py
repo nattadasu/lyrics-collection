@@ -88,7 +88,9 @@ ERROR_CODES = {
 class LintError:
     """Represents a linting error with code and details."""
 
-    def __init__(self, code: str, line_num: int, context: str = "", full_line: str = ""):
+    def __init__(
+        self, code: str, line_num: int, context: str = "", full_line: str = ""
+    ):
         self.code = code
         self.line_num = line_num
         self.context = context
@@ -199,7 +201,12 @@ class MusixmatchLyricsLinter:
         return suppressions
 
     def _add_error(
-        self, code: str, line_num: int, context: str, line_suppressions: Set[str], full_line: str = ""
+        self,
+        code: str,
+        line_num: int,
+        context: str,
+        line_suppressions: Set[str],
+        full_line: str = "",
     ):
         """Add a linting error if not suppressed."""
         if "*" in line_suppressions or self._is_rule_disabled(code, line_suppressions):
@@ -283,14 +290,18 @@ class MusixmatchLyricsLinter:
             and w not in ["DJ", "TV", "USA", "UK", "NYC", "LA"]
         ]
         if len(all_caps_words) > 0:
-            self._add_error("MX102", line_num, " ".join(all_caps_words), suppressions, text)
+            self._add_error(
+                "MX102", line_num, " ".join(all_caps_words), suppressions, text
+            )
 
         # MX103: Don't capitalize every word (title case)
         words_longer_than_3 = [w for w in words if len(w) > 3 and w.isalpha()]
         if len(words_longer_than_3) > 2:
             title_case_count = sum(1 for w in words_longer_than_3 if w[0].isupper())
             if title_case_count == len(words_longer_than_3):
-                self._add_error("MX103", line_num, " ".join(words_longer_than_3), suppressions, text)
+                self._add_error(
+                    "MX103", line_num, " ".join(words_longer_than_3), suppressions, text
+                )
 
     def _check_punctuation_line(self, line_num: int, text: str, suppressions: Set[str]):
         """Check punctuation rules for a single line."""
@@ -307,7 +318,9 @@ class MusixmatchLyricsLinter:
             self._add_error("MX202", line_num, rstrip[-1], suppressions, text)
 
         # MX203: Don't use multiple punctuation marks
-        match = re.search(r"(?<!\.)\.\.(?!\.)|\.{4,}|[!?]{2,}|[!?]\.(?!\.)|\.\.?[!?]", text)
+        match = re.search(
+            r"(?<!\.)\.\.(?!\.)|\.{4,}|[!?]{2,}|[!?]\.(?!\.)|\.\.?[!?]", text
+        )
         if match:
             self._add_error("MX203", line_num, match.group(), suppressions, text)
 
@@ -328,17 +341,21 @@ class MusixmatchLyricsLinter:
         # MX301: Remove multiple consecutive spaces (check before strip_ass_tags normalization)
         if "  " in text_raw:
             match = re.search(r"  +", text_raw)
-            self._add_error("MX301", line_num, match.group() if match else "  ", suppressions, text)
+            self._add_error(
+                "MX301", line_num, match.group() if match else "  ", suppressions, text
+            )
 
         # MX302: Remove leading/trailing spaces (check before strip_ass_tags normalization)
         if text_raw != text_raw.strip():
             self._add_error("MX302", line_num, "", suppressions, text)
 
         # MX303: Use straight quotes instead of smart quotes
-        smart_quote_chars = '""''""'
+        smart_quote_chars = '""""'
         smart_quotes = [c for c in text if c in smart_quote_chars]
         if smart_quotes:
-            self._add_error("MX303", line_num, "".join(smart_quotes), suppressions, text)
+            self._add_error(
+                "MX303", line_num, "".join(smart_quotes), suppressions, text
+            )
 
         # MX304: Use Unicode ellipsis instead of three dots
         match = re.search(r"\.{3}", text)
@@ -439,7 +456,9 @@ class MusixmatchLyricsLinter:
                 tag_content = match.group()
                 # Allow karaoke tags: \k, \K, \kf, \ko, etc.
                 if not re.search(r"\\[kK]", tag_content):
-                    self._add_error("MX306", line_num, tag_content, suppressions, raw_text)
+                    self._add_error(
+                        "MX306", line_num, tag_content, suppressions, raw_text
+                    )
 
     def _check_direct_speech_line(
         self, line_num: int, text: str, suppressions: Set[str]
@@ -511,24 +530,27 @@ def list_error_codes():
     table.add_column("Level", width=8)
     table.add_column("Message", style="white")
 
-    prev_category = None
-    for code in sorted(ERROR_CODES.keys()):
+    sorted_codes = sorted(ERROR_CODES.keys())
+    for i, code in enumerate(sorted_codes):
         error_def = ERROR_CODES[code]
         category = get_category(code)
-        
-        # Add separator row when category changes
-        # if prev_category is not None and prev_category != category:
-            # table.add_row("", "", "", "", end_section=True)
-        
+
         level_style = "red" if error_def["level"] == "error" else "yellow"
+
+        # Check if next item has different category (draw separator after this row)
+        add_section = False
+        if i + 1 < len(sorted_codes):
+            next_code = sorted_codes[i + 1]
+            next_category = get_category(next_code)
+            add_section = category != next_category
+
         table.add_row(
             code,
             category,
             f"[{level_style}]{error_def['level'].upper()}[/{level_style}]",
             error_def["message"],
-            end_section=prev_category is not None and prev_category != category,
+            end_section=add_section,
         )
-        prev_category = category
 
     console.print(table)
 
@@ -676,40 +698,50 @@ Examples:
                 lint_msg = lint_error.error_def["message"]
                 highlighted_issue = lint_error.context
                 full_line = lint_error.full_line
-                
+
                 # Show the full line with the highlighted issue
                 if highlighted_issue and highlighted_issue in full_line:
                     # Find and highlight the issue in the full line before escaping
                     idx = full_line.find(highlighted_issue)
                     if idx != -1:
                         before = full_line[:idx].replace("[", "\\[").replace("]", "\\]")
-                        issue = highlighted_issue.replace("[", "\\[").replace("]", "\\]")
-                        after = full_line[idx + len(highlighted_issue):].replace("[", "\\[").replace("]", "\\]")
-                        line_with_highlight = f"{before}[bold {color}]{issue}[/bold {color}]{after}"
+                        issue = highlighted_issue.replace("[", "\\[").replace(
+                            "]", "\\]"
+                        )
+                        after = (
+                            full_line[idx + len(highlighted_issue) :]
+                            .replace("[", "\\[")
+                            .replace("]", "\\]")
+                        )
+                        line_with_highlight = (
+                            f"{before}[bold {color}]{issue}[/bold {color}]{after}"
+                        )
                         console.print(
                             f"  [{color}]{symbol} {code}[/{color}]: {line_with_highlight}",
                             highlight=False,
                         )
                     else:
                         # Fallback if not found
-                        full_line_escaped = full_line.replace("[", "\\[").replace("]", "\\]")
+                        full_line_escaped = full_line.replace("[", "\\[").replace(
+                            "]", "\\]"
+                        )
                         console.print(
                             f"  [{color}]{symbol} {code}[/{color}]: {full_line_escaped}",
                             highlight=False,
                         )
                 else:
                     # If no highlighted issue or can't find it, just show the full line
-                    full_line_escaped = full_line.replace("[", "\\[").replace("]", "\\]")
+                    full_line_escaped = full_line.replace("[", "\\[").replace(
+                        "]", "\\]"
+                    )
                     console.print(
                         f"  [{color}]{symbol} {code}[/{color}]: {full_line_escaped}",
                         highlight=False,
                     )
-                
+
                 # Show the lint message below if available
                 if lint_msg:
-                    console.print(
-                        f"         [dim]> {lint_msg}[/dim]", highlight=False
-                    )
+                    console.print(f"         [dim]> {lint_msg}[/dim]", highlight=False)
 
     # Summary
     console.print()
