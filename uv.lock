@@ -13,15 +13,15 @@ wheels = [
 
 [[package]]
 name = "ass-to-lrc"
-version = "0.3.0"
+version = "0.4.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ass" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/67/c5/0c6bfe5867482608969a5fad54d0e3c589981136bb8244a3de6ac1cfbc13/ass_to_lrc-0.3.0.tar.gz", hash = "sha256:f27e9a40c7c43fcb8da2a4de490ac653d853671873acd7856ca68b0248e63e37", size = 61325, upload-time = "2025-11-02T06:39:37.541Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2c/7c/8f91ee2ee5325cff1c52ffceea23051d483a19a3afbbec58573ce38f6512/ass_to_lrc-0.4.0.tar.gz", hash = "sha256:f1df2ca52b89d3ea7d046a4bf5f2e1503a2f06ae1409ba0dbd3870d8769d4004", size = 62375, upload-time = "2025-11-09T08:54:54.699Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5b/fc/308d3cecc208f12179459a59c2af6062acca83ac089f70b623d1791d4ba1/ass_to_lrc-0.3.0-py3-none-any.whl", hash = "sha256:d52a1d1f1c7455980bf06e74c3f192b822a30eb5ffd356194de24d03f89ffb10", size = 16081, upload-time = "2025-11-02T06:39:35.901Z" },
+    { url = "https://files.pythonhosted.org/packages/9d/34/59e08e80012f4f517c50f2321c02fccd97f0dde577084a1bfb0033448ba4/ass_to_lrc-0.4.0-py3-none-any.whl", hash = "sha256:235feec3f43c52e9c067b1365a4c906458c6e902b848abe356e41d01194ec273", size = 17539, upload-time = "2025-11-09T08:54:53.168Z" },
 ]
 
 [[package]]
@@ -94,7 +94,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "ass", specifier = ">=0.5.2" },
-    { name = "ass-to-lrc", specifier = ">=0.3.0" },
+    { name = "ass-to-lrc", specifier = ">=0.4.0" },
     { name = "pre-commit", specifier = ">=4.3.0" },
 ]
 
