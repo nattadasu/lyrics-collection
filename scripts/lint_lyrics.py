@@ -23,55 +23,62 @@ ERROR_CODES = {
     # Punctuation (MX2XX)
     "MX201": {"message": "Don't end lines with commas", "level": "error"},
     "MX202": {
-        "message": "Don't end lines with periods (unless acronym)",
+        "message": "Don't end lines with periods (unless acronym or ellipsis)",
         "level": "error",
     },
     "MX203": {"message": "Don't use multiple punctuation marks", "level": "error"},
     "MX204": {"message": "Remove space before punctuation", "level": "error"},
     "MX205": {"message": "Add space after punctuation", "level": "error"},
-    # Formatting (MX3XX)
+    # Formatting and line breaks (MX3XX)
     "MX301": {"message": "Remove multiple consecutive spaces", "level": "error"},
     "MX302": {"message": "Remove leading/trailing spaces", "level": "error"},
     "MX303": {
         "message": 'Use straight quotes (") instead of smart quotes',
         "level": "error",
     },
+    "MX304": {
+        "message": "Use Unicode ellipsis (…) instead of three dots (...)",
+        "level": "warning",
+    },
+    "MX305": {
+        "message": "Consider splitting multi-line lyrics into separate events",
+        "level": "warning",
+    },
+    "MX306": {
+        "message": "Don't use ASS override tags (except for any karaoke tags)",
+        "level": "error",
+    },
     # Special characters (MX4XX)
-    "MX401": {"message": "Don't use brackets in lyrics", "level": "error"},
+    "MX401": {"message": "Don't use square brackets [ ] in lyrics", "level": "error"},
     "MX402": {
         "message": "Don't censor with asterisks. Use hyphen if audio is censored (e.g., 'f-')",
         "level": "error",
     },
-    # Line breaks (MX5XX)
+    # Numbers (MX5XX)
     "MX501": {
-        "message": "Consider splitting multi-line lyrics into separate events",
-        "level": "warning",
-    },
-    # Numbers (MX6XX)
-    "MX601": {
         "message": "Write numbers over 10 numerically, not as words",
         "level": "error",
     },
-    # Multipliers (MX7XX)
-    "MX701": {
+    # Multipliers (MX6XX)
+    "MX601": {
         "message": "Don't use multipliers like (x5). Transcribe repetitions fully",
         "level": "error",
     },
-    # Non-vocal content (MX8XX)
-    "MX801": {
+    # Non-vocal content (MX7XX)
+    "MX701": {
         "message": "Don't include structure labels like (Verse - Artist)",
         "level": "error",
     },
-    "MX802": {
+    "MX702": {
         "message": "Don't include sound effect descriptions like *dial tone*",
         "level": "error",
     },
-    # Direct speech (MX9XX)
-    "MX901": {
+    # Direct speech (MX8XX)
+    "MX801": {
         "message": "Direct speech should follow a comma: 'text, \"Speech\"'",
         "level": "warning",
     },
-    "MX902": {
+    "MX802": {
         "message": "Direct speech must start with capital letter",
         "level": "error",
     },
@@ -238,7 +245,7 @@ class MusixmatchLyricsLinter:
             self._check_multipliers_line(dialogue_line_num, text, line_suppressions)
             self._check_censorship_line(dialogue_line_num, text, line_suppressions)
             self._check_non_vocal_content_line(
-                dialogue_line_num, text, line_suppressions
+                dialogue_line_num, text, line_suppressions, event.text
             )
             self._check_direct_speech_line(dialogue_line_num, text, line_suppressions)
 
@@ -293,9 +300,9 @@ class MusixmatchLyricsLinter:
         if rstrip.endswith(",") or rstrip.endswith("、"):
             self._add_error("MX201", line_num, rstrip[-1], suppressions, text)
 
-        # MX202: Don't end lines with periods (except acronyms)
+        # MX202: Don't end lines with periods (except acronyms and ellipses)
         if (rstrip.endswith(".") or rstrip.endswith("。")) and not re.search(
-            r"[A-Z]\.$", rstrip
+            r"[A-Z]\.$|\.{3}$", rstrip
         ):
             self._add_error("MX202", line_num, rstrip[-1], suppressions, text)
 
@@ -333,6 +340,11 @@ class MusixmatchLyricsLinter:
         if smart_quotes:
             self._add_error("MX303", line_num, "".join(smart_quotes), suppressions, text)
 
+        # MX304: Use Unicode ellipsis instead of three dots
+        match = re.search(r"\.{3}", text)
+        if match:
+            self._add_error("MX304", line_num, match.group(), suppressions, text)
+
     def _check_special_characters_line(
         self, line_num: int, text: str, suppressions: Set[str]
     ):
@@ -351,9 +363,9 @@ class MusixmatchLyricsLinter:
         self, line_num: int, text: str, raw_text: str, suppressions: Set[str]
     ):
         """Check line break rules for a single line."""
-        # MX501: Consider splitting multi-line lyrics
+        # MX305: Consider splitting multi-line lyrics
         if "\\N" in raw_text or "\\n" in raw_text:
-            self._add_error("MX501", line_num, "", suppressions, text)
+            self._add_error("MX305", line_num, "", suppressions, text)
 
     def _check_numbers_line(self, line_num: int, text: str, suppressions: Set[str]):
         """Check number formatting for a single line."""
@@ -382,20 +394,20 @@ class MusixmatchLyricsLinter:
 
         text_lower = text.lower()
 
-        # MX601: Write numbers over 10 numerically
+        # MX501: Write numbers over 10 numerically
         for word, value in number_words.items():
             if value > 10:
                 match = re.search(rf"\b{word}\b", text_lower)
                 if match:
-                    self._add_error("MX601", line_num, word, suppressions, text)
+                    self._add_error("MX501", line_num, word, suppressions, text)
                     break
 
     def _check_multipliers_line(self, line_num: int, text: str, suppressions: Set[str]):
         """Check for multipliers for a single line."""
-        # MX701: Don't use multipliers
+        # MX601: Don't use multipliers
         match = re.search(r"\([xX×]\s*\d+\)", text)
         if match:
-            self._add_error("MX701", line_num, match.group(), suppressions, text)
+            self._add_error("MX601", line_num, match.group(), suppressions, text)
 
     def _check_censorship_line(self, line_num: int, text: str, suppressions: Set[str]):
         """Check censorship formatting for a single line."""
@@ -403,22 +415,31 @@ class MusixmatchLyricsLinter:
         pass
 
     def _check_non_vocal_content_line(
-        self, line_num: int, text: str, suppressions: Set[str]
+        self, line_num: int, text: str, suppressions: Set[str], raw_text: str = ""
     ):
         """Check for non-vocal content for a single line."""
-        # MX801: Don't include structure labels
+        # MX701: Don't include structure labels
         match = re.search(
             r"\((Verse|Chorus|Bridge|Intro|Outro|Hook|Pre-Chorus)[\s\-][^)]*\)",
             text,
             re.IGNORECASE,
         )
         if match:
-            self._add_error("MX801", line_num, match.group(), suppressions, text)
+            self._add_error("MX701", line_num, match.group(), suppressions, text)
 
-        # MX802: Don't include sound effect descriptions
+        # MX702: Don't include sound effect descriptions
         match = re.search(r"\*[^*]+\*", text)
         if match:
-            self._add_error("MX802", line_num, match.group(), suppressions, text)
+            self._add_error("MX702", line_num, match.group(), suppressions, text)
+
+        # MX306: Don't use ASS override tags (except karaoke tags)
+        if raw_text:
+            # Find all ASS override tags
+            for match in re.finditer(r"\{\\[^}]+\}", raw_text):
+                tag_content = match.group()
+                # Allow karaoke tags: \k, \K, \kf, \ko, etc.
+                if not re.search(r"\\[kK]", tag_content):
+                    self._add_error("MX306", line_num, tag_content, suppressions, raw_text)
 
     def _check_direct_speech_line(
         self, line_num: int, text: str, suppressions: Set[str]
@@ -427,17 +448,17 @@ class MusixmatchLyricsLinter:
         if '"' not in text:
             return
 
-        # MX901: Direct speech should follow a comma (warning)
+        # MX801: Direct speech should follow a comma (warning)
         match = re.search(r'"[A-Z]', text)
         if match and not re.search(r',\s*"[A-Z]', text):
             if not text.strip().startswith('"'):
-                self._add_error("MX901", line_num, match.group(), suppressions, text)
+                self._add_error("MX801", line_num, match.group(), suppressions, text)
 
-        # MX902: Direct speech must start with capital letter
+        # MX802: Direct speech must start with capital letter
         quotes = re.findall(r'"([^"]+)"', text)
         for quote in quotes:
             if quote and quote[0].isalpha() and not quote[0].isupper():
-                self._add_error("MX902", line_num, f'"{quote}"', suppressions, text)
+                self._add_error("MX802", line_num, f'"{quote}"', suppressions, text)
 
     @staticmethod
     def strip_ass_tags(text: str) -> str:
@@ -456,6 +477,29 @@ def list_error_codes():
 
     console = Console()
 
+    # Define categories based on code ranges
+    def get_category(code: str) -> str:
+        if code == "MX000":
+            return "Parse Errors"
+        elif code.startswith("MX1"):
+            return "Capitalization"
+        elif code.startswith("MX2"):
+            return "Punctuation"
+        elif code.startswith("MX3"):
+            return "Formatting & Line Breaks"
+        elif code.startswith("MX4"):
+            return "Special Characters"
+        elif code.startswith("MX5"):
+            return "Numbers"
+        elif code.startswith("MX6"):
+            return "Multipliers"
+        elif code.startswith("MX7"):
+            return "Non-Vocal Content"
+        elif code.startswith("MX8"):
+            return "Direct Speech"
+        else:
+            return "Other"
+
     table = Table(
         title="Lint Error Codes",
         box=box.ROUNDED,
@@ -463,17 +507,28 @@ def list_error_codes():
         header_style="bold magenta",
     )
     table.add_column("Code", style="cyan", width=8)
+    table.add_column("Category", style="blue", width=25)
     table.add_column("Level", width=8)
     table.add_column("Message", style="white")
 
+    prev_category = None
     for code in sorted(ERROR_CODES.keys()):
         error_def = ERROR_CODES[code]
+        category = get_category(code)
+        
+        # Add separator row when category changes
+        # if prev_category is not None and prev_category != category:
+            # table.add_row("", "", "", "", end_section=True)
+        
         level_style = "red" if error_def["level"] == "error" else "yellow"
         table.add_row(
             code,
+            category,
             f"[{level_style}]{error_def['level'].upper()}[/{level_style}]",
             error_def["message"],
+            end_section=prev_category is not None and prev_category != category,
         )
+        prev_category = category
 
     console.print(table)
 

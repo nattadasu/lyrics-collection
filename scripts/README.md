@@ -41,13 +41,12 @@ python scripts/lint_lyrics.py --list-codes
 | Parse Errors | MX000 | File parsing issues |
 | Capitalization | MX1XX | First letter, all caps, title case |
 | Punctuation | MX2XX | Commas, periods, multiple marks, spacing |
-| Formatting | MX3XX | Spaces, quotes |
+| Formatting & Line Breaks | MX3XX | Spaces, quotes, multi-line lyrics, ASS tags |
 | Special Characters | MX4XX | Brackets, asterisks |
-| Line Breaks | MX5XX | Multi-line lyrics |
-| Numbers | MX6XX | Spell out 1-10 only |
-| Multipliers | MX7XX | No (x3) notations |
-| Non-Vocal | MX8XX | Structure labels, sound effects |
-| Direct Speech | MX9XX | Comma before quotes, capitalize |
+| Numbers | MX5XX | Spell out 1-10 only |
+| Multipliers | MX6XX | No (x3) notations |
+| Non-Vocal | MX7XX | Structure labels, sound effects |
+| Direct Speech | MX8XX | Comma before quotes, capitalize |
 
 #### MX000: Parse Error
 Failed to parse the ASS file. Ensure the file is a valid ASS subtitle file.
@@ -55,60 +54,62 @@ Failed to parse the ASS file. Ensure the file is a valid ASS subtitle file.
 #### MX1XX: Capitalization
 | Code | Rule | Bad Example | Good Example |
 |------|------|-------------|--------------|
-| MX101 | First letter must be capitalized | `the world` | `The world` |
+| MX101 | First letter must be capitalized (skipped for non-Latin scripts) | `the world` | `The world` |
 | MX102 | No all caps for emphasis (DJ, TV, USA, UK, NYC, LA excepted) | `I LOVE you` | `I love you` |
 | MX103 | No title case | `Every Single Word` | `Every single word` |
 
-**Note:** Special cases like "iPhone", "iPad", "eBay" are allowed.
+> [!NOTE]
+>
+> - Capitalization checks are skipped for scripts without a case system
+>   (e.g., Arabic, Chinese, Japanese)
+> - Brand names like "iPhone", "iPad", "eBay" are allowed to start with lowercase letters
 
 #### MX2XX: Punctuation
 | Code | Rule | Bad Example | Good Example |
 |------|------|-------------|--------------|
-| MX201 | No trailing commas | `I love you,` | `I love you` |
-| MX202 | No trailing periods (except acronyms) | `I love you.` | `I love you` or `U.S.A.` |
+| MX201 | No trailing commas (including Japanese 、) | `I love you,` or `愛してる、` | `I love you` or `愛してる` |
+| MX202 | No trailing periods (except acronyms) (including Japanese 。) | `I love you.` or `愛してる。` | `I love you` or `U.S.A.` or `愛してる` |
 | MX203 | No multiple punctuation (ellipses `...` excepted) | `What??` or `Really?!` | `What?` or `Fading...` |
 | MX204 | No space before punctuation | `Hello , world` | `Hello, world` |
 | MX205 | Space after punctuation | `Hello,world` | `Hello, world` |
 
-#### MX3XX: Formatting
+#### MX3XX: Formatting & Line Breaks
 | Code | Rule | Bad Example | Good Example |
 |------|------|-------------|--------------|
 | MX301 | Single spaces only | `Hello··world` | `Hello world` |
 | MX302 | No leading/trailing spaces | `·Hello·` | `Hello` |
 | MX303 | Use straight quotes, not smart quotes | `"Hello"` | `"Hello"` |
+| MX304 | Use Unicode ellipsis instead of three dots (Warning) | `Fading...` | `Fading…` |
+| MX305 | Avoid `\N` or `\n` (Warning) | `Line one\NLine two` | Separate events |
+| MX306 | No ASS override tags (karaoke tags like `\k`, `\K`, `\kf`, `\ko` are allowed) | `{\i1}Hello{\i0}` or `{\b1}World` | `Hello` or use karaoke tags only |
 
 #### MX4XX: Special Characters
 | Code | Rule | Bad Example | Good Example |
 |------|------|-------------|--------------|
-| MX401 | No brackets | `[Verse] Hello` | `Hello` |
+| MX401 | No square brackets | `[Verse] Hello` | `Hello` |
 | MX402 | No asterisk censoring (use hyphens if audio is censored) | `F***` or `****` | `Fuck` or `F-` |
 
-#### MX5XX: Line Breaks
+#### MX5XX: Numbers
 | Code | Rule | Bad Example | Good Example |
 |------|------|-------------|--------------|
-| MX501 | Avoid `\N` or `\n` (Warning) | `Line one\NLine two` | Separate events |
+| MX501 | Write 11+ as digits (1-10 can be words) | `twenty dollars` | `20 dollars` or `five dollars` |
 
-#### MX6XX: Numbers
+#### MX6XX: Multipliers
 | Code | Rule | Bad Example | Good Example |
 |------|------|-------------|--------------|
-| MX601 | Write 11+ as digits (1-10 can be words) | `twenty dollars` | `20 dollars` or `five dollars` |
+| MX601 | No multipliers, transcribe fully | `La (x3)` | `La la la` |
 
-#### MX7XX: Multipliers
+#### MX7XX: Non-Vocal Content
 | Code | Rule | Bad Example | Good Example |
 |------|------|-------------|--------------|
-| MX701 | No multipliers, transcribe fully | `La (x3)` | `La la la` |
+| MX701 | No structure labels | `(Verse - John)` or `(Chorus)` | Remove labels |
+| MX702 | No sound effects | `*dial tone* Hello` | `Hello` |
 
-#### MX8XX: Non-Vocal Content
+#### MX8XX: Direct Speech
 | Code | Rule | Bad Example | Good Example |
 |------|------|-------------|--------------|
-| MX801 | No structure labels | `(Verse - John)` or `(Chorus)` | Remove labels |
-| MX802 | No sound effects | `*dial tone* Hello` | `Hello` |
-
-#### MX9XX: Direct Speech
-| Code | Rule | Bad Example | Good Example |
-|------|------|-------------|--------------|
-| MX901 | Comma before quotes (Warning) | `She said "hi"` | `She said, "hi"` |
-| MX902 | Capitalize quoted text | `"hello world"` | `"Hello world"` |
+| MX801 | Comma before quotes (Warning) | `She said "hi"` | `She said, "hi"` |
+| MX802 | Capitalize quoted text | `"hello world"` | `"Hello world"` |
 
 ### Rule Suppression
 
