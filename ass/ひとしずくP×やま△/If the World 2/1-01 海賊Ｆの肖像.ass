@@ -14,7 +14,9 @@ Audio File: ../../../../../../../run/media/nattadasu/Music/iTunes/iTunes Media/M
 Video File: ?dummy:100.000000:19575:1280:720:0:0:0:
 Video AR Value: 1.777778
 Video Zoom Percent: 0.375000
-Video Position: 142
+Scroll Position: 3
+Active Line: 3
+Video Position: 2322
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
@@ -25,7 +27,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 Dialogue: 0,0:00:00.74,0:00:06.15,Default,,0,0,0,,静かな夜に 窓を開けて
 Dialogue: 0,0:00:06.15,0:00:10.89,Default,,0,0,0,,眠れぬ時を チクタクと過ぎれば
 Dialogue: 0,0:00:10.89,0:00:15.83,Default,,0,0,0,,小さな妖精が 誘いにくる
-Dialogue: 0,0:00:15.83,0:00:20.01,Default,,0,0,0,,終わらぬ夢、ネバーランドへ...
+Dialogue: 0,0:00:15.83,0:00:20.01,Default,,0,0,0,,終わらぬ夢、ネバーランドへ…
 Dialogue: 0,0:00:36.31,0:00:39.57,Default,,0,0,0,,嫌だ、だ、だ！大人が作る
 Dialogue: 0,0:00:39.57,0:00:42.95,Default,,0,0,0,,嘘だらけ、汚い現実せかい！
 Dialogue: 0,0:00:42.95,0:00:46.34,Default,,0,0,0,,もう ずっと子供のままでいたいよぉ
@@ -38,7 +40,7 @@ Dialogue: 0,0:00:59.57,0:01:02.25,Default,,0,0,0,,子供の夢だけ続く、世
 Dialogue: 0,0:01:02.25,0:01:05.64,Default,,0,0,0,,しゃにむに さあ ぶっ飛んじゃえ どうせ 夢見るランナウェイ
 Dialogue: 0,0:01:05.64,0:01:09.01,Default,,0,0,0,,ワガママでも 生意気でも チャイルディッシュゆえ フォーギンミー
 Dialogue: 0,0:01:09.01,0:01:12.15,Default,,0,0,0,,大嫌いだった現実せかいは 全部、ポッケにしまっちゃって
-Dialogue: 0,0:01:12.15,0:01:15.45,Default,,0,0,0,,なんて楽しい なんて素敵な 子供の国へ... 行こう！
+Dialogue: 0,0:01:12.15,0:01:15.45,Default,,0,0,0,,なんて楽しい なんて素敵な 子供の国へ… 行こう！
 Dialogue: 0,0:01:21.76,0:01:25.11,Default,,0,0,0,,美しき人魚と歌い
 Dialogue: 0,0:01:25.11,0:01:28.48,Default,,0,0,0,,野を駆けてインディアンとキャンプ
 Dialogue: 0,0:01:28.48,0:01:31.46,Default,,0,0,0,,ピーターパン、ご機嫌はいかが？
@@ -47,15 +49,15 @@ Dialogue: 0,0:01:34.98,0:01:36.67,Default,,0,0,0,,あらあら大変！
 Dialogue: 0,0:01:36.67,0:01:38.04,Default,,0,0,0,,フックが襲ってきたわ！
 Dialogue: 0,0:01:38.04,0:01:40.98,Default,,0,0,0,,今日こそピーター 倒してやるぜ～！ヨーホーヨー！
 Dialogue: 0,0:01:40.98,0:01:44.62,Default,,0,0,0,,残忍な悪党を倒して、皆の英雄ヒーロー！
-Dialogue: 0,0:01:44.62,0:01:47.75,Default,,0,0,0,,今こそあなたの夢を... 叶えて！
+Dialogue: 0,0:01:44.62,0:01:47.75,Default,,0,0,0,,今こそあなたの夢を… 叶えて！
 Dialogue: 0,0:01:47.75,0:01:51.26,Default,,0,0,0,,しゃにむに さあ ぶっ倒しちゃえ なんと愉快な ファンタジー
 Dialogue: 0,0:01:51.26,0:01:54.31,Default,,0,0,0,,ずる賢くて強欲な 悪い大人を成敗！
 Dialogue: 0,0:01:54.31,0:01:57.55,Default,,0,0,0,,大盛り上がり決闘シーンは 拍手喝采の大団円
 Dialogue: 0,0:01:57.55,0:02:00.65,Default,,0,0,0,,英雄ぶって のぼせ上がって ハイになっちゃってる、や！
 Dialogue: 0,0:02:00.65,0:02:03.86,Default,,0,0,0,,ネバーランドの悪を倒し
 Dialogue: 0,0:02:03.86,0:02:06.93,Default,,0,0,0,,平和な日々が ただただ過ぎていく
-Dialogue: 0,0:02:06.93,0:02:08.78,Default,,0,0,0,,あれ... 何かが、オカシイなぁ？
-Dialogue: 0,0:02:08.78,0:02:10.24,Default,,0,0,0,,あれ... 何かが、物足りない？
+Dialogue: 0,0:02:06.93,0:02:08.78,Default,,0,0,0,,あれ… 何かが、オカシイなぁ？
+Dialogue: 0,0:02:08.78,0:02:10.24,Default,,0,0,0,,あれ… 何かが、物足りない？
 Dialogue: 0,0:02:10.24,0:02:13.81,Default,,0,0,0,,ねぇ、何もかにも、つまらない！
 Dialogue: 0,0:02:29.94,0:02:33.32,Default,,0,0,0,,夢を叶えたピーターパンは ちょっと「大人」になっちゃった
 Dialogue: 0,0:02:33.32,0:02:36.44,Default,,0,0,0,,冒険の旅 チャンバラごっこ 気づけばもう 飽き飽き
